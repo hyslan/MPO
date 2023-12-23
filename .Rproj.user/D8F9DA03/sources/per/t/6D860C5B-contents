@@ -1,0 +1,21 @@
+library("readxl")
+library("odbc")
+library("DBI")
+library("dplyr")
+
+# Carregar planilha excel
+df <- read_excel("ISAP csv.xlsx", sheet = "CSV")
+
+# Estabeleça a conexão com o banco de dados SQL Server usando Windows Authentication
+conexao <- dbConnect(odbc::odbc(), .connection_string = paste0("Driver={SQL Server};Server=10.66.42.188;Database=BD_MLG;Trusted_Connection=yes;"))
+
+# Insert
+dbWriteTable(conexao,
+             name = SQL('"LESTE_AD\\hcruz_novasp"."tbHyslancruz_ISAP_ADVISOR"'),
+             value = df,
+             overwrite = TRUE,
+             append = FALSE,
+)
+
+
+
